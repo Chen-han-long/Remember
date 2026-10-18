@@ -123,3 +123,9 @@ dialog input,dialog textarea{max-width:100%}
 @media(max-width:360px){.brand small{display:none}.nav{font-size:11px;gap:2px}.stats article{padding:12px 8px}.stats strong{font-size:27px}.stats .dot{margin-right:4px}.start-panel{padding:20px}.start-panel h2{font-size:23px}}
 @media(max-height:520px) and (orientation:landscape){dialog{max-height:calc(100dvh - 16px);padding:16px}#unit-list{max-height:32dvh}.sidebar .side-note{display:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+
+/* Review or undo an answer before advancing. */
+#answer-actions{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:24px}
+#answer-actions[hidden]{display:none!important}
+#undo-choice{border-color:#d6c8ad;color:#896f49;background:#fffaf0}
+@media(max-width:760px){#answer-actions{display:grid;grid-template-columns:1fr;gap:10px}#answer-actions>button{width:100%;min-height:48px;margin:0}#undo-choice{order:2}}
