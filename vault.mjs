@@ -1,0 +1,8 @@
+const ITERATIONS=600000;
+const enc=new TextEncoder();
+const aad=enc.encode('Remember DeepSeek key vault v1');
+const b64=bytes=>btoa(String.fromCharCode(...bytes));
+const bytes=str=>Uint8Array.from(atob(str),c=>c.charCodeAt(0));
+async function derive(password,salt){const material=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:ITERATIONS,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
+export async function seal(apiKey,password){if(password.length<12)throw Error('请设置至少 12 位密码，建议使用独立的长密码。');if(!apiKey.startsWith('sk-')||apiKey.length<20||apiKey.length>512||/\s/.test(apiKey))throw Error('请输入完整 DeepSeek API Key，不要填写遮罩内容。');const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));const key=await derive(password,salt);const data=await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:aad},key,enc.encode(apiKey));return {version:1,kdf:'PBKDF2-SHA256',iterations:ITERATIONS,salt:b64(salt),iv:b64(iv),ciphertext:b64(new Uint8Array(data))};}
+export async function unseal(vault,password){try{if(vault.version!==1||vault.kdf!=='PBKDF2-SHA256'||vault.iterations!==ITERATIONS||typeof vault.ciphertext!=='string'||vault.ciphertext.length>2048)throw Error();const salt=bytes(vault.salt),iv=bytes(vault.iv);if(salt.length!==16||iv.length!==12)throw Error();const key=await derive(password,salt);return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad},key,bytes(vault.ciphertext)));}catch{throw Error('密码不正确或加密记录已损坏。忘记密码时，请删除本机密钥并重新设置。');}}
