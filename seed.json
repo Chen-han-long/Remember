@@ -1,0 +1,1196 @@
+[
+  {
+    "order": 1,
+    "word": "ambition",
+    "definition": "n.野心,雄心,抱负",
+    "page": 1
+  },
+  {
+    "order": 2,
+    "word": "action",
+    "definition": "n.行为,行动;功能,作用",
+    "page": 1
+  },
+  {
+    "order": 3,
+    "word": "activate",
+    "definition": "v.使活动;激活;使活化",
+    "page": 1
+  },
+  {
+    "order": 4,
+    "word": "active",
+    "definition": "adj.积极的,活跃的;起作用的",
+    "page": 1
+  },
+  {
+    "order": 5,
+    "word": "react",
+    "definition": "v.起反应;回应,做出反应",
+    "page": 1
+  },
+  {
+    "order": 6,
+    "word": "exact",
+    "definition": "adj.准确的,精确的,严谨的 v.强求",
+    "page": 1
+  },
+  {
+    "order": 7,
+    "word": "actual",
+    "definition": "adj.实际的;真正的;真实的",
+    "page": 1
+  },
+  {
+    "order": 8,
+    "word": "interact",
+    "definition": "v.交流,沟通;相互影响,相互作用",
+    "page": 1
+  },
+  {
+    "order": 9,
+    "word": "behave",
+    "definition": "v.表现得体;表现",
+    "page": 1
+  },
+  {
+    "order": 10,
+    "word": "conduct",
+    "definition": "v.组织;实施;指挥 n.行为;举止",
+    "page": 1
+  },
+  {
+    "order": 11,
+    "word": "semiconductor",
+    "definition": "n.半导体",
+    "page": 1
+  },
+  {
+    "order": 12,
+    "word": "direct",
+    "definition": "v.指导,指挥 adj.直接的",
+    "page": 1
+  },
+  {
+    "order": 13,
+    "word": "implement",
+    "definition": "v.使生效;执行;实施 n.工具,器具",
+    "page": 1
+  },
+  {
+    "order": 14,
+    "word": "antique",
+    "definition": "adj.古代的;古老的 n.古董",
+    "page": 1
+  },
+  {
+    "order": 15,
+    "word": "anticipate",
+    "definition": "v.预期,期望",
+    "page": 1
+  },
+  {
+    "order": 16,
+    "word": "participate",
+    "definition": "v.参与,参加",
+    "page": 1
+  },
+  {
+    "order": 17,
+    "word": "ancient",
+    "definition": "adj.古代的;古老的",
+    "page": 1
+  },
+  {
+    "order": 18,
+    "word": "stale",
+    "definition": "adj.不新鲜的;污浊的;陈腐的",
+    "page": 1
+  },
+  {
+    "order": 19,
+    "word": "refresh",
+    "definition": "v.(使)精神振作,(使)精力恢复",
+    "page": 1
+  },
+  {
+    "order": 20,
+    "word": "flesh",
+    "definition": "n.肉,果肉;肉体,肌肤",
+    "page": 1
+  },
+  {
+    "order": 21,
+    "word": "renew",
+    "definition": "v.更新;重新开始",
+    "page": 1
+  },
+  {
+    "order": 22,
+    "word": "restore",
+    "definition": "v.恢复,修复;归还",
+    "page": 1
+  },
+  {
+    "order": 23,
+    "word": "storage",
+    "definition": "n.贮藏(空间);贮存;存储",
+    "page": 1
+  },
+  {
+    "order": 24,
+    "word": "renovate",
+    "definition": "v.修复,翻新,重新粉刷",
+    "page": 1
+  },
+  {
+    "order": 25,
+    "word": "innovate",
+    "definition": "v.创新;革新",
+    "page": 1
+  },
+  {
+    "order": 26,
+    "word": "recur",
+    "definition": "v.再发生;反复出现",
+    "page": 1
+  },
+  {
+    "order": 27,
+    "word": "incur",
+    "definition": "v.招致,遭受;引致",
+    "page": 1
+  },
+  {
+    "order": 28,
+    "word": "curb",
+    "definition": "n.控制;抑制 v.控制;抑制",
+    "page": 1
+  },
+  {
+    "order": 29,
+    "word": "steer",
+    "definition": "v.驾驶;操纵;控制;引导",
+    "page": 1
+  },
+  {
+    "order": 30,
+    "word": "harness",
+    "definition": "v.控制,利用 n.马具;背带",
+    "page": 1
+  },
+  {
+    "order": 31,
+    "word": "dominate",
+    "definition": "v.支配,控制;占优势",
+    "page": 1
+  },
+  {
+    "order": 32,
+    "word": "predominant",
+    "definition": "adj.显著的;盛行的",
+    "page": 1
+  },
+  {
+    "order": 33,
+    "word": "domestic",
+    "definition": "adj.家庭的;国内的",
+    "page": 1
+  },
+  {
+    "order": 34,
+    "word": "reign",
+    "definition": "n.统治,支配 v.当权,统治",
+    "page": 1
+  },
+  {
+    "order": 35,
+    "word": "sovereign",
+    "definition": "n.君主,元首 adj.至高无上的",
+    "page": 1
+  },
+  {
+    "order": 36,
+    "word": "monarch",
+    "definition": "n.君主;帝王",
+    "page": 1
+  },
+  {
+    "order": 37,
+    "word": "award",
+    "definition": "n.奖,奖品,奖金 v.授予",
+    "page": 1
+  },
+  {
+    "order": 38,
+    "word": "reward",
+    "definition": "n.奖励;回报;报酬 v.奖赏;奖励",
+    "page": 1
+  },
+  {
+    "order": 39,
+    "word": "awkward",
+    "definition": "adj.令人尴尬的;笨拙的",
+    "page": 1
+  },
+  {
+    "order": 40,
+    "word": "embarrass",
+    "definition": "v.使尴尬;使为难;使陷入困境",
+    "page": 1
+  },
+  {
+    "order": 41,
+    "word": "embassy",
+    "definition": "n.大使馆;(统称)使馆官员",
+    "page": 1
+  },
+  {
+    "order": 42,
+    "word": "barren",
+    "definition": "adj.贫瘠的;不毛的,不孕的",
+    "page": 1
+  },
+  {
+    "order": 43,
+    "word": "bare",
+    "definition": "adj.裸露的;光秃秃的;空的 v.使露出",
+    "page": 1
+  },
+  {
+    "order": 44,
+    "word": "bargain",
+    "definition": "n.便宜货;交易 v.讨价还价",
+    "page": 1
+  },
+  {
+    "order": 45,
+    "word": "barrier",
+    "definition": "n.屏障;障碍物;阻力;分界线;隔阂",
+    "page": 1
+  },
+  {
+    "order": 46,
+    "word": "margin",
+    "definition": "n.边缘;幅度;差额;利润率",
+    "page": 1
+  },
+  {
+    "order": 47,
+    "word": "frontier",
+    "definition": "n.前沿;边境,国界",
+    "page": 1
+  },
+  {
+    "order": 48,
+    "word": "boundary",
+    "definition": "n.边界,分界线,界限",
+    "page": 1
+  },
+  {
+    "order": 49,
+    "word": "border",
+    "definition": "n.边,边界,边境 v.接壤,毗邻",
+    "page": 1
+  },
+  {
+    "order": 50,
+    "word": "rise",
+    "definition": "n.上涨 v.上升;起身;起义",
+    "page": 1
+  },
+  {
+    "order": 51,
+    "word": "arise",
+    "definition": "v.发生;产生;出现;由……引起",
+    "page": 2
+  },
+  {
+    "order": 52,
+    "word": "arouse",
+    "definition": "v.唤醒;唤起,引起,激起",
+    "page": 2
+  },
+  {
+    "order": 53,
+    "word": "raise",
+    "definition": "n.加薪 v.举起;增加;提高",
+    "page": 2
+  },
+  {
+    "order": 54,
+    "word": "praise",
+    "definition": "n.表扬,赞美 v.表扬,赞美",
+    "page": 2
+  },
+  {
+    "order": 55,
+    "word": "prize",
+    "definition": "n.奖赏,奖金,奖品 v.珍视",
+    "page": 2
+  },
+  {
+    "order": 56,
+    "word": "enterprise",
+    "definition": "n.公司;事业;企业活动;事业心",
+    "page": 2
+  },
+  {
+    "order": 57,
+    "word": "applaud",
+    "definition": "v.称赞;鼓掌",
+    "page": 2
+  },
+  {
+    "order": 58,
+    "word": "clap",
+    "definition": "n.鼓掌;拍手 v.鼓掌;拍手",
+    "page": 2
+  },
+  {
+    "order": 59,
+    "word": "compliment",
+    "definition": "v.赞扬;称赞 n.赞扬;称赞",
+    "page": 2
+  },
+  {
+    "order": 60,
+    "word": "astonish",
+    "definition": "v.使十分惊讶",
+    "page": 2
+  },
+  {
+    "order": 61,
+    "word": "dismay",
+    "definition": "n.灰心;惊愕 v.使失望;使惊愕",
+    "page": 2
+  },
+  {
+    "order": 62,
+    "word": "amaze",
+    "definition": "v.使惊奇;使惊愕;使惊诧",
+    "page": 2
+  },
+  {
+    "order": 63,
+    "word": "amuse",
+    "definition": "v.逗乐,逗笑;(使)娱乐",
+    "page": 2
+  },
+  {
+    "order": 64,
+    "word": "recreation",
+    "definition": "n.消遣,娱乐;再造",
+    "page": 2
+  },
+  {
+    "order": 65,
+    "word": "entertain",
+    "definition": "v.招待,款待;使快乐;娱乐",
+    "page": 2
+  },
+  {
+    "order": 66,
+    "word": "attain",
+    "definition": "v.达到,获得",
+    "page": 2
+  },
+  {
+    "order": 67,
+    "word": "retain",
+    "definition": "v.保持;聘请;记住",
+    "page": 2
+  },
+  {
+    "order": 68,
+    "word": "sustain",
+    "definition": "v.维持;支撑,承担;经受",
+    "page": 2
+  },
+  {
+    "order": 69,
+    "word": "maintain",
+    "definition": "v.维持;维修;坚持认为",
+    "page": 2
+  },
+  {
+    "order": 70,
+    "word": "obtain",
+    "definition": "v.获得,得到",
+    "page": 2
+  },
+  {
+    "order": 71,
+    "word": "pertain",
+    "definition": "v.属于;适用;关于",
+    "page": 2
+  },
+  {
+    "order": 72,
+    "word": "detain",
+    "definition": "v.拘留;留住;耽搁",
+    "page": 2
+  },
+  {
+    "order": 73,
+    "word": "arrest",
+    "definition": "n.拘留;逮捕 v.逮捕;吸引",
+    "page": 2
+  },
+  {
+    "order": 74,
+    "word": "leisure",
+    "definition": "n.空闲,闲暇,休闲",
+    "page": 2
+  },
+  {
+    "order": 75,
+    "word": "retire",
+    "definition": "v.退休;退役;退出",
+    "page": 2
+  },
+  {
+    "order": 76,
+    "word": "entire",
+    "definition": "adj.全部的,整个的;完全的",
+    "page": 2
+  },
+  {
+    "order": 77,
+    "word": "exhaust",
+    "definition": "v.使筋疲力尽;用尽 n.废气",
+    "page": 2
+  },
+  {
+    "order": 78,
+    "word": "drain",
+    "definition": "v.排空;耗尽 n.下水道;耗竭",
+    "page": 2
+  },
+  {
+    "order": 79,
+    "word": "burnout",
+    "definition": "n.精疲力竭;过度劳累;燃尽",
+    "page": 2
+  },
+  {
+    "order": 80,
+    "word": "fatigue",
+    "definition": "n.疲劳;劳累",
+    "page": 2
+  },
+  {
+    "order": 81,
+    "word": "obese",
+    "definition": "adj.臃肿的,虚胖的",
+    "page": 2
+  },
+  {
+    "order": 82,
+    "word": "weary",
+    "definition": "adj.疲劳的;令人厌倦的 v.(使)疲劳;疲倦",
+    "page": 2
+  },
+  {
+    "order": 83,
+    "word": "mere",
+    "definition": "adj.仅仅的,只不过",
+    "page": 2
+  },
+  {
+    "order": 84,
+    "word": "acquire",
+    "definition": "v.获得;学到,掌握",
+    "page": 2
+  },
+  {
+    "order": 85,
+    "word": "require",
+    "definition": "v.需要;依靠;依赖;要求",
+    "page": 2
+  },
+  {
+    "order": 86,
+    "word": "inquire",
+    "definition": "v.询问;查究;打听",
+    "page": 2
+  },
+  {
+    "order": 87,
+    "word": "fare",
+    "definition": "n.车费;船费",
+    "page": 2
+  },
+  {
+    "order": 88,
+    "word": "fee",
+    "definition": "n.费用;酬金",
+    "page": 2
+  },
+  {
+    "order": 89,
+    "word": "farewell",
+    "definition": "n.告别",
+    "page": 2
+  },
+  {
+    "order": 90,
+    "word": "welfare",
+    "definition": "n.福利;幸福;安康;社会保障金",
+    "page": 2
+  },
+  {
+    "order": 91,
+    "word": "pension",
+    "definition": "n.养老金,退休金",
+    "page": 2
+  },
+  {
+    "order": 92,
+    "word": "allowance",
+    "definition": "n.津贴;零用钱;限额;免税额",
+    "page": 2
+  },
+  {
+    "order": 93,
+    "word": "bonus",
+    "definition": "n.奖金;红利",
+    "page": 2
+  },
+  {
+    "order": 94,
+    "word": "subsidy",
+    "definition": "n.津贴,补贴",
+    "page": 2
+  },
+  {
+    "order": 95,
+    "word": "benefit",
+    "definition": "n.利益,好处;津贴 v.有益于",
+    "page": 2
+  },
+  {
+    "order": 96,
+    "word": "benevolent",
+    "definition": "adj.慈善的;行善的;乐善好施的",
+    "page": 2
+  },
+  {
+    "order": 97,
+    "word": "revenue",
+    "definition": "n.税收,国家的收入;收益",
+    "page": 2
+  },
+  {
+    "order": 98,
+    "word": "avenue",
+    "definition": "n.大街;林荫大道;选择,途径",
+    "page": 2
+  },
+  {
+    "order": 99,
+    "word": "profit",
+    "definition": "n.利润,益处 v.获益;对……有益",
+    "page": 2
+  },
+  {
+    "order": 100,
+    "word": "prolong",
+    "definition": "v.延长,拖延",
+    "page": 2
+  },
+  {
+    "order": 101,
+    "word": "profound",
+    "definition": "adj.深刻的,深远的;深奥的",
+    "page": 3
+  },
+  {
+    "order": 102,
+    "word": "foundation",
+    "definition": "n.基础;根据;基金会;地基",
+    "page": 3
+  },
+  {
+    "order": 103,
+    "word": "basis",
+    "definition": "n.基础,基本;要素;缘由;基准",
+    "page": 3
+  },
+  {
+    "order": 104,
+    "word": "background",
+    "definition": "n.背景,后台",
+    "page": 3
+  },
+  {
+    "order": 105,
+    "word": "capital",
+    "definition": "n.资本,资金;大写字母;首都",
+    "page": 3
+  },
+  {
+    "order": 106,
+    "word": "loom",
+    "definition": "v.逼近;若隐若现 n.织布机",
+    "page": 3
+  },
+  {
+    "order": 107,
+    "word": "boom",
+    "definition": "n.(发出)隆隆声;激增,繁荣 v.(发出)隆隆声;激增,繁荣",
+    "page": 3
+  },
+  {
+    "order": 108,
+    "word": "doom",
+    "definition": "n.死亡;毁灭;厄运 v.注定(死亡等)",
+    "page": 3
+  },
+  {
+    "order": 109,
+    "word": "bloom",
+    "definition": "v.开花;变得健康 n.花",
+    "page": 3
+  },
+  {
+    "order": 110,
+    "word": "gloom",
+    "definition": "n.忧郁;愁闷;无望;幽暗",
+    "page": 3
+  },
+  {
+    "order": 111,
+    "word": "boost",
+    "definition": "v.促进;使增长 n.提高;增长",
+    "page": 3
+  },
+  {
+    "order": 112,
+    "word": "boast",
+    "definition": "v.自夸,吹嘘;炫耀",
+    "page": 3
+  },
+  {
+    "order": 113,
+    "word": "toast",
+    "definition": "v.为……干杯;烤 n.吐司;祝酒,敬酒",
+    "page": 3
+  },
+  {
+    "order": 114,
+    "word": "blush",
+    "definition": "v.脸红;羞愧,尴尬 n.脸红",
+    "page": 3
+  },
+  {
+    "order": 115,
+    "word": "flush",
+    "definition": "n.脸红;冲洗 v.脸红;冲洗",
+    "page": 3
+  },
+  {
+    "order": 116,
+    "word": "splash",
+    "definition": "v.溅在……上 n.落水声;溅上的液体",
+    "page": 3
+  },
+  {
+    "order": 117,
+    "word": "dense",
+    "definition": "adj.密集的,稠密的;难懂的",
+    "page": 3
+  },
+  {
+    "order": 118,
+    "word": "condense",
+    "definition": "v.压缩;浓缩;冷凝",
+    "page": 3
+  },
+  {
+    "order": 119,
+    "word": "compact",
+    "definition": "adj.紧凑的;简洁的 n.合约 v.压紧",
+    "page": 3
+  },
+  {
+    "order": 120,
+    "word": "impact",
+    "definition": "n.碰撞;巨大影响 v.冲击;影响",
+    "page": 3
+  },
+  {
+    "order": 121,
+    "word": "influence",
+    "definition": "n.影响,影响力;有影响的人 v.影响",
+    "page": 3
+  },
+  {
+    "order": 122,
+    "word": "fluctuate",
+    "definition": "v.波动,起伏",
+    "page": 3
+  },
+  {
+    "order": 123,
+    "word": "exert",
+    "definition": "v.运用,施加",
+    "page": 3
+  },
+  {
+    "order": 124,
+    "word": "powerful",
+    "definition": "adj.有权力的;强有力的",
+    "page": 3
+  },
+  {
+    "order": 125,
+    "word": "force",
+    "definition": "n.力量;武力;部队 v.强迫",
+    "page": 3
+  },
+  {
+    "order": 126,
+    "word": "enforce",
+    "definition": "v.强制;强迫;执行",
+    "page": 3
+  },
+  {
+    "order": 127,
+    "word": "reinforce",
+    "definition": "v.加强;充实;给……加强力量",
+    "page": 3
+  },
+  {
+    "order": 128,
+    "word": "democratic",
+    "definition": "adj.民主的;民主制度的;民主党的",
+    "page": 3
+  },
+  {
+    "order": 129,
+    "word": "scratch",
+    "definition": "n.划痕;抓痕 v.抓,挠;划破",
+    "page": 3
+  },
+  {
+    "order": 130,
+    "word": "snatch",
+    "definition": "v.抢走;抓紧时间做;一下夺过",
+    "page": 3
+  },
+  {
+    "order": 131,
+    "word": "capture",
+    "definition": "n.捕获;战利品 v.俘获;引起",
+    "page": 3
+  },
+  {
+    "order": 132,
+    "word": "capacity",
+    "definition": "n.容量;领悟能力;职位",
+    "page": 3
+  },
+  {
+    "order": 133,
+    "word": "generate",
+    "definition": "v.产生;引起",
+    "page": 3
+  },
+  {
+    "order": 134,
+    "word": "squeeze",
+    "definition": "n.压,挤,捏 v.压,挤,捏",
+    "page": 3
+  },
+  {
+    "order": 135,
+    "word": "breeze",
+    "definition": "n.微风,轻风;轻而易举的事",
+    "page": 3
+  },
+  {
+    "order": 136,
+    "word": "freeze",
+    "definition": "v.冻住,结冰;使定格;惊呆",
+    "page": 3
+  },
+  {
+    "order": 137,
+    "word": "frustrate",
+    "definition": "v.使沮丧,使懊恼;阻止;防止",
+    "page": 3
+  },
+  {
+    "order": 138,
+    "word": "setback",
+    "definition": "n.挫折,阻碍",
+    "page": 3
+  },
+  {
+    "order": 139,
+    "word": "discourage",
+    "definition": "v.使气馁,使沮丧;阻拦;阻止",
+    "page": 3
+  },
+  {
+    "order": 140,
+    "word": "encourage",
+    "definition": "v.支持;鼓励;激励;刺激;鼓动",
+    "page": 3
+  },
+  {
+    "order": 141,
+    "word": "encouragement",
+    "definition": "n.鼓舞;起激励作用的事物",
+    "page": 3
+  },
+  {
+    "order": 142,
+    "word": "confident",
+    "definition": "adj.自信的;确信的",
+    "page": 3
+  },
+  {
+    "order": 143,
+    "word": "confidential",
+    "definition": "adj.机密的;保密的",
+    "page": 3
+  },
+  {
+    "order": 144,
+    "word": "bold",
+    "definition": "adj.自信的;敢于冒险的",
+    "page": 3
+  },
+  {
+    "order": 145,
+    "word": "bald",
+    "definition": "adj.光秃的,秃顶的;简单的",
+    "page": 3
+  },
+  {
+    "order": 146,
+    "word": "bleak",
+    "definition": "adj.无望的;暗淡的;荒凉的",
+    "page": 3
+  },
+  {
+    "order": 147,
+    "word": "leak",
+    "definition": "v.漏;渗漏;泄漏;渗入",
+    "page": 3
+  },
+  {
+    "order": 148,
+    "word": "blank",
+    "definition": "adj.空白的;空着的;没有表情的 n.空白处",
+    "page": 3
+  },
+  {
+    "order": 149,
+    "word": "vacant",
+    "definition": "adj.空缺的,未被占用的",
+    "page": 3
+  },
+  {
+    "order": 150,
+    "word": "gap",
+    "definition": "n.缺口,裂口;分歧;隔阂;差距",
+    "page": 3
+  },
+  {
+    "order": 151,
+    "word": "hollow",
+    "definition": "n.洞 adj.空的,中空的;空虚的",
+    "page": 4
+  },
+  {
+    "order": 152,
+    "word": "shallow",
+    "definition": "adj.浅的;浅薄的",
+    "page": 4
+  },
+  {
+    "order": 153,
+    "word": "shadow",
+    "definition": "n.阴影;影子;少许 v.跟踪;盯梢",
+    "page": 4
+  },
+  {
+    "order": 154,
+    "word": "swallow",
+    "definition": "n.燕子 v.吞下,咽下",
+    "page": 4
+  },
+  {
+    "order": 155,
+    "word": "scatter",
+    "definition": "v.撒;撒播;散布 n.散落",
+    "page": 4
+  },
+  {
+    "order": 156,
+    "word": "catalogue",
+    "definition": "n.目录 v.将……编入目录",
+    "page": 4
+  },
+  {
+    "order": 157,
+    "word": "category",
+    "definition": "n.类别,种类;范畴",
+    "page": 4
+  },
+  {
+    "order": 158,
+    "word": "appetite",
+    "definition": "n.胃口;强烈欲望;喜好,喜爱",
+    "page": 4
+  },
+  {
+    "order": 159,
+    "word": "petition",
+    "definition": "n.请愿书;申诉书 v.请求;请愿",
+    "page": 4
+  },
+  {
+    "order": 160,
+    "word": "impetus",
+    "definition": "n.动力,推动,促进",
+    "page": 4
+  },
+  {
+    "order": 161,
+    "word": "impulse",
+    "definition": "n.冲动;推动力;动力;刺激",
+    "page": 4
+  },
+  {
+    "order": 162,
+    "word": "drama",
+    "definition": "n.戏;戏剧;戏剧性事件",
+    "page": 4
+  },
+  {
+    "order": 163,
+    "word": "dramatic",
+    "definition": "adj.戏剧性的;巨大的",
+    "page": 4
+  },
+  {
+    "order": 164,
+    "word": "drastic",
+    "definition": "adj.极端的;急剧的;猛烈的",
+    "page": 4
+  },
+  {
+    "order": 165,
+    "word": "tragedy",
+    "definition": "n.悲剧;灾难;不幸",
+    "page": 4
+  },
+  {
+    "order": 166,
+    "word": "comedy",
+    "definition": "n.喜剧(片);滑稽",
+    "page": 4
+  },
+  {
+    "order": 167,
+    "word": "fiction",
+    "definition": "n.小说;虚构的事",
+    "page": 4
+  },
+  {
+    "order": 168,
+    "word": "junction",
+    "definition": "n.交叉点;接合点;汇合处",
+    "page": 4
+  },
+  {
+    "order": 169,
+    "word": "novel",
+    "definition": "n.小说 adj.新颖的,珍奇的",
+    "page": 4
+  },
+  {
+    "order": 170,
+    "word": "mystery",
+    "definition": "n.神秘,神秘的人或物;奥秘",
+    "page": 4
+  },
+  {
+    "order": 171,
+    "word": "render",
+    "definition": "v.使成为;使变得;给予;回报",
+    "page": 4
+  },
+  {
+    "order": 172,
+    "word": "moist",
+    "definition": "adj.潮湿的,湿润的",
+    "page": 4
+  },
+  {
+    "order": 173,
+    "word": "damp",
+    "definition": "adj.潮湿的 n.潮湿 v.使潮湿",
+    "page": 4
+  },
+  {
+    "order": 174,
+    "word": "dump",
+    "definition": "n.垃圾场;废物堆 v.倾倒",
+    "page": 4
+  },
+  {
+    "order": 175,
+    "word": "humid",
+    "definition": "adj.温暖潮湿的;湿热的",
+    "page": 4
+  },
+  {
+    "order": 176,
+    "word": "humiliate",
+    "definition": "v.羞辱;使丧失尊严",
+    "page": 4
+  },
+  {
+    "order": 177,
+    "word": "humble",
+    "definition": "adj.谦卑的;没有特别之处的",
+    "page": 4
+  },
+  {
+    "order": 178,
+    "word": "humour",
+    "definition": "n.幽默,幽默感",
+    "page": 4
+  },
+  {
+    "order": 179,
+    "word": "humanity",
+    "definition": "n.人类;人性,人道",
+    "page": 4
+  },
+  {
+    "order": 180,
+    "word": "humane",
+    "definition": "adj.善良的;仁慈的;人道的",
+    "page": 4
+  },
+  {
+    "order": 181,
+    "word": "individual",
+    "definition": "n.个人 adj.个人的;单独的",
+    "page": 4
+  },
+  {
+    "order": 182,
+    "word": "divide",
+    "definition": "v.分开,分割;分配 n.差异",
+    "page": 4
+  },
+  {
+    "order": 183,
+    "word": "folk",
+    "definition": "n.人们 adj.传统民间的",
+    "page": 4
+  },
+  {
+    "order": 184,
+    "word": "mass",
+    "definition": "n.大量;群众 adj.大批的",
+    "page": 4
+  },
+  {
+    "order": 185,
+    "word": "massive",
+    "definition": "adj.巨大的;严重的;结实的",
+    "page": 4
+  },
+  {
+    "order": 186,
+    "word": "chunk",
+    "definition": "n.大块;相当大的量;语块",
+    "page": 4
+  },
+  {
+    "order": 187,
+    "word": "mess",
+    "definition": "n.肮脏;杂乱 v.弄糟,弄乱",
+    "page": 4
+  },
+  {
+    "order": 188,
+    "word": "chaos",
+    "definition": "n.混乱,杂乱;紊乱",
+    "page": 4
+  },
+  {
+    "order": 189,
+    "word": "disorder",
+    "definition": "n.混乱;杂乱;失调;紊乱",
+    "page": 4
+  },
+  {
+    "order": 190,
+    "word": "peer",
+    "definition": "n.同龄人,同辈 v.仔细看",
+    "page": 4
+  },
+  {
+    "order": 191,
+    "word": "pioneer",
+    "definition": "n.先锋,先驱 v.当开拓者",
+    "page": 4
+  },
+  {
+    "order": 192,
+    "word": "compatible",
+    "definition": "adj.兼容的;可共存的;关系好的",
+    "page": 4
+  },
+  {
+    "order": 193,
+    "word": "being",
+    "definition": "n.人,生物;存在",
+    "page": 4
+  },
+  {
+    "order": 194,
+    "word": "species",
+    "definition": "n.物种,种类",
+    "page": 4
+  },
+  {
+    "order": 195,
+    "word": "animation",
+    "definition": "n.动画,动画制作;活力,生气",
+    "page": 4
+  },
+  {
+    "order": 196,
+    "word": "existence",
+    "definition": "n.存在,生存",
+    "page": 4
+  },
+  {
+    "order": 197,
+    "word": "create",
+    "definition": "v.创造,创作;引起,产生",
+    "page": 4
+  },
+  {
+    "order": 198,
+    "word": "creature",
+    "definition": "n.生物,动物",
+    "page": 4
+  },
+  {
+    "order": 199,
+    "word": "concrete",
+    "definition": "adj.具体的,有形的 n.混凝土",
+    "page": 4
+  }
+]
