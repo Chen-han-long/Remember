@@ -1,0 +1,26 @@
+{
+  "name": "2027-cad-studio",
+  "private": true,
+  "version": "2.5.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "prebuild": "node scripts/check-models.mjs",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "node --check src/ai.js && node scripts/check-models.mjs && node scripts/test-browser-ai.mjs",
+    "test:api": "node scripts/test-browser-ai.mjs",
+    "check:models": "node scripts/check-models.mjs",
+    "test:browser-ai": "node scripts/test-browser-ai.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.0",
+    "vite": "^7.1.11"
+  }
+}

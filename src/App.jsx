@@ -1,0 +1,259 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { Activity, Aperture, ArrowDownToLine, ArrowLeft, BadgeCheck, Box, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Code2, Compass, Download, Eye, EyeOff, FileDown, FileText, Github, Image as ImageIcon, Layers, Maximize2, Minimize2, Menu, MessageCircle, Minus, Moon, Palette, Plus, Rotate3D, RotateCcw, Send, Settings2, ShieldCheck, SlidersHorizontal, Sparkles, Sun, UploadCloud, WandSparkles, X, Copy, Trash2, KeyRound, Square } from 'lucide-react';
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'three';
+import Viewer from './Viewer';
+import { parts,partById,palettes,quickQuestions } from './data';
+import { askDeepSeek } from './ai';
+import holeCatalog from './holeCatalog.json';
+
+const initialOptions={edges:false,color:'#8eabc0',metalness:.18,roughness:.67,light:1.8,opacity:1,shadows:true,grid:true,axes:false,wireframe:false,rotate:false};
+const backgrounds={midnight:'深空',slate:'石墨',light:'浅色'};
+const getModelName=(imported,part)=>imported?imported.name:part.name;
+const drawingUrl=(id,ext)=>`${import.meta.env.BASE_URL}drawings/${id}.${ext}`;
+
+function Switch({checked,onChange,label}) {return <label className="switch-row"><span>{label}</span><button type="button" role="switch" aria-checked={checked} className={`switch ${checked?'active':''}`} onClick={()=>onChange(!checked)}><span/></button></label>}
+function Range({label,value,onChange,min,max,step=.01,display}){return <div className="range-block"><div className="range-caption"><span>{label}</span><strong>{display||Math.round(value*100)+'%'}</strong></div><input aria-label={label} type="range" min={min} max={max} step={step} value={value} onChange={e=>onChange(+e.target.value)}/></div>}
+function ViewButton({children,active=false,onClick,title}){return <button type="button" className={`view-button ${active?'selected':''}`} onClick={onClick} title={title}>{children}</button>}
+
+export default function App(){
+  const [partId,setPartId]=useState('B');
+  const [options,setOptions]=useState(initialOptions);
+  const [background,setBackground]=useState('midnight');
+  const [settingsOpen,setSettingsOpen]=useState(false);
+  const [viewCommand,setViewCommand]=useState({name:'iso',seq:0});
+  const [activeView,setActiveView]=useState('iso');
+  const [projection,setProjection]=useState('perspective');
+  const [showDrawing,setShowDrawing]=useState(false);
+  const [expandedViewer,setExpandedViewer]=useState(false);
+  const [compareMode,setCompareMode]=useState(false);
+  const [showHoleTable,setShowHoleTable]=useState(true);
+  const [focusHole,setFocusHole]=useState(null);
+  const [showMobileNav,setShowMobileNav]=useState(false);
+  const [showInspector,setShowInspector]=useState(false);
+  const [imported,setImported]=useState(null);
+  const [dragging,setDragging]=useState(false);
+  const [messagesByModel,setMessagesByModel]=useState({});
+  const [question,setQuestion]=useState('');
+  const [apiKey,setApiKey]=useState(''); // 当前页面内存，不使用本地存储
+  const [showKey,setShowKey]=useState(false);
+  const [keyOpen,setKeyOpen]=useState(false);
+  const [includeImage,setIncludeImage]=useState(true);
+  const [busy,setBusy]=useState(false);
+  const [toast,setToast]=useState('');
+  const viewerRef=useRef();const viewerShellRef=useRef(null);const fileInput=useRef();const chatListRef=useRef();const toastTimer=useRef();const requestAbortRef=useRef(null);
+  const part=partById[partId];const chatKey=imported?`import:${imported.name}`:partId;const messages=messagesByModel[chatKey]||[];
+  const setOpt=(name,value)=>setOptions(o=>({...o,[name]:value}));
+  function notify(txt){setToast(txt);clearTimeout(toastTimer.current);toastTimer.current=setTimeout(()=>setToast(''),3800)}
+  useEffect(()=>()=>clearTimeout(toastTimer.current),[]);
+  useEffect(()=>{const box=chatListRef.current;if(box)box.scrollTo({top:box.scrollHeight,behavior:'smooth'});},[messages.length,busy,chatKey]);
+  useEffect(()=>{const fn=e=>{if(e.key==='Escape'){setShowDrawing(false);setShowMobileNav(false);setShowInspector(false);setExpandedViewer(false)}};window.addEventListener('keydown',fn);return()=>window.removeEventListener('keydown',fn)},[]);
+  // Keep drawers from covering the desktop workspace after a device rotates.
+  useEffect(()=>{const onResize=()=>{if(window.innerWidth>900)setShowMobileNav(false);if(window.innerWidth>1199)setShowInspector(false)};window.addEventListener('resize',onResize);return()=>window.removeEventListener('resize',onResize)},[]);
+  const changeView=(name)=>{setFocusHole(null);setActiveView(name);setViewCommand(v=>({name,seq:v.seq+1}));};
+  const openParts=()=>{setShowInspector(false);setShowMobileNav(true)};
+  const openControls=(nextTab='ai')=>{setShowMobileNav(false);setSettingsOpen(nextTab==='appearance');setShowInspector(true)};
+  const closeDrawers=()=>{setShowMobileNav(false);setShowInspector(false)};
+  const returnToViewer=()=>{closeDrawers();viewerShellRef.current?.scrollIntoView({behavior:'smooth',block:'center'})};
+  function choosePart(id){requestAbortRef.current?.abort();setFocusHole(null);setPartId(id);setImported(null);setQuestion('');setOptions(o=>({...o,rotate:false}));changeView('iso');setShowMobileNav(false)}
+  async function loadModel(file){
+    if(!file)return;
+    requestAbortRef.current?.abort();
+    const ext=file.name.split('.').pop().toLowerCase();
+    if(!['stl','obj','glb'].includes(ext)){notify('仅支持 .stl、.obj、.glb；PDF 不能直接自动转成精确三维模型。');return}
+    if(file.size>50*1024*1024){notify('请导入小于 50MB 的模型文件。');return}
+    try{
+      let object;
+      if(ext==='stl'){
+        const buffer=await file.arrayBuffer();const geometry=new STLLoader().parse(buffer);
+        geometry.computeVertexNormals();object=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial());
+      }else if(ext==='obj'){
+        object=new OBJLoader().parse(await file.text());
+      }else{
+        const buffer=await file.arrayBuffer();object=await new Promise((resolve,reject)=>new GLTFLoader().parse(buffer,'',data=>resolve(data.scene),reject));
+      }
+      setImported({name:file.name,object});changeView('iso');notify(`已导入 ${file.name}`);
+    }catch(e){console.error(e);notify('文件解析失败，请检查格式或改用 STL、OBJ、GLB。')}
+    if(fileInput.current)fileInput.current.value='';
+  }
+  function handleDrop(e){e.preventDefault();setDragging(false);loadModel(e.dataTransfer.files?.[0])}
+  function exportModel(type){try{if(type==='stl'){viewerRef.current.exportSTL();notify('已导出三维预览 STL；未完成图纸尺寸与公差校验，不可直接加工。')}else{viewerRef.current.screenshot();notify('已导出当前视角 PNG 图片。')}}catch(e){notify(e.message||'操作失败')}}
+  function clearConversation(){
+    requestAbortRef.current?.abort();
+    setMessagesByModel(map=>({...map,[chatKey]:[]}));
+    notify('已清空当前零件的聊天记录（只清空本页内存）。');
+  }
+  async function copyMessage(content){
+    try{await navigator.clipboard.writeText(content);notify('内容已复制。')}
+    catch{notify('复制失败。请选中文字后手动复制。')}
+  }
+  function cancelAI(){requestAbortRef.current?.abort()}
+  async function askAI(txt=question){
+    const q=String(txt||'').trim();if(!q||busy)return;
+    if(!apiKey.trim()){
+      setQuestion(q);setKeyOpen(true);setShowInspector(true);
+      notify('请先输入 DeepSeek API Key，再发送问题。');return;
+    }
+    const previous=messages;setQuestion('');setSettingsOpen(false);setBusy(true);
+    let screenshot;
+    if(includeImage){try{screenshot=viewerRef.current?.captureForAI()}catch(e){notify('无法获取三维截图，将只发送文字信息。')}}
+    const controller=new AbortController();requestAbortRef.current=controller;
+    setMessagesByModel(map=>({...map,[chatKey]:[...previous,{role:'user',content:q,withImage:!!screenshot}]}));
+    try{
+      const answer=await askDeepSeek({key:apiKey,partId,customModel:imported?.name,question:q,history:previous,screenshot,signal:controller.signal});
+      if(!controller.signal.aborted){
+        setMessagesByModel(map=>({...map,[chatKey]:[...(map[chatKey]||[]),{role:'assistant',content:answer}]}));
+      }
+    }catch(e){
+      if(!controller.signal.aborted){
+        setMessagesByModel(map=>({...map,[chatKey]:[...(map[chatKey]||[]),{role:'error',content:e.message||'调用失败'}]}));
+      }
+    }finally{if(requestAbortRef.current===controller)requestAbortRef.current=null;setBusy(false)}
+  }
+  return <div className={`app app-${background}`} onDragOver={e=>{e.preventDefault();setDragging(true)}} onDragLeave={e=>{if(!e.currentTarget.contains(e.relatedTarget))setDragging(false)}} onDrop={handleDrop}>
+    <input className="sr-only" ref={fileInput} type="file" accept=".stl,.obj,.glb" onChange={e=>loadModel(e.target.files?.[0])}/>
+    <aside id="parts-drawer" aria-label="零件库" className={`left-sidebar ${showMobileNav?'mobile-open':''}`}>
+      <div className="brand">
+        <div className="brand-logo"><Box size={22} strokeWidth={1.75}/></div>
+        <div><div className="brand-title">FORGE <span>STUDIO</span></div><div className="brand-kicker">ENGINEERING VISUAL LAB</div></div>
+        <button type="button" className="mobile-close icon-btn" aria-label="关闭零件库" onClick={()=>setShowMobileNav(false)}><X size={18}/></button>
+      </div>
+      <div className="sidebar-section-label"><span>项目工作区</span><span>2027 SERIES</span></div>
+      <div className="project-card"><div className="project-icon"><Layers size={19}/></div><div><strong>机械零件三维可视化</strong><span>8 张工程图 · 布尔实体预览</span></div><Check size={15} className="project-check"/></div>
+      <div className="parts-title"><span>零件库 <b>08</b></span><span className="parts-sub">PARTS</span></div>
+      <div className="part-list">
+        {parts.map(p=><button key={p.id} className={`part-item ${p.id===partId&&!imported?'active':''}`} onClick={()=>choosePart(p.id)}>
+          <div className="part-image"><img src={drawingUrl(p.id,'png')} alt={`${p.id}件图纸缩略图`} loading="lazy" /></div>
+          <div className="part-copy"><div className="part-line"><strong>{p.id}件 · {p.name}</strong>{p.id===partId&&!imported&&<span className="active-dot"/>}</div><span>{p.material} <i>•</i> {p.kind}</span></div>
+          <ChevronRight size={15} className="part-chevron"/>
+        </button>)}
+        {imported&&<div className="imported-item"><UploadCloud size={17}/><span title={imported.name}>{imported.name}</span><button onClick={()=>setImported(null)} aria-label="关闭导入模型"><X size={14}/></button></div>}
+      </div>
+      <div className="sidebar-bottom"><div className="sidebar-tip"><ShieldCheck size={16}/><span>已改用经实体检查的简化 CAD 网格；部分未标注细节仍需校核。</span></div><button className="import-button" onClick={()=>fileInput.current?.click()}><UploadCloud size={17}/> 导入 3D 模型 <span>STL / OBJ / GLB</span></button></div>
+    </aside>
+    <main className="main-workspace">
+      <header className="topbar">
+        <div className="topbar-left"><button type="button" className="mobile-menu icon-btn" onClick={openParts} aria-label="打开零件库" aria-controls="parts-drawer" aria-expanded={showMobileNav}><Menu size={19}/></button><span>项目</span><ChevronRight size={14}/><strong>2027 机械零件库</strong><ChevronRight size={14}/><span className="crumb-last">{imported?'自定义模型':`${part.id}件 · ${part.name}`}</span></div>
+        <div className="topbar-right"><span className="saved-status"><span/> GitHub Pages 版</span><span className="topbar-divider"/><a href="https://github.com/new" title="在 GitHub 创建仓库" target="_blank" rel="noreferrer"><Github size={17}/></a><button type="button" className="icon-btn mobile-ai-shortcut" onClick={()=>openControls('ai')} aria-label="打开 AI 助手" aria-controls="controls-drawer" aria-expanded={showInspector&&!settingsOpen}><Sparkles size={18}/></button><button type="button" className="icon-btn mobile-settings" onClick={()=>{setShowMobileNav(false);setShowInspector(v=>!v)}} aria-label="打开或关闭模型设置" aria-controls="controls-drawer" aria-expanded={showInspector}><Settings2 size={18}/></button></div>
+      </header>
+      <div className="work-title"><div><div className="eyebrow">3D MODEL VIEWPORT <span className="eyebrow-line"/></div><h1>{getModelName(imported,part)} <span className="name-num">{imported?'IMPORT':`/ ${part.id}–2027`}</span></h1><p>{imported?'用户导入的网格文件 · 单位取决于原文件':`${part.english} · ${part.material} · 图纸外形：${part.dimensions}`}</p></div><div className="title-actions"><button className="small-action" onClick={()=>setShowDrawing(true)}><FileText size={15}/> 对照原图</button><button className="small-action primary" onClick={()=>exportModel('png')}><ImageIcon size={15}/> 导出截图</button></div></div>
+      <section id="model-viewport" ref={viewerShellRef} aria-label="三维模型查看窗口" className={`viewer-shell ${expandedViewer?'viewer-expanded':''}`}>
+        <div className="canvas-area"><Viewer ref={viewerRef} id={partId} imported={imported} options={options} viewCommand={viewCommand} focusHole={focusHole} projection={projection} background={background}/></div>
+        {compareMode&&!imported&&<div className="drawing-compare" aria-label="原始工程图关键视图对照">
+          <div className="drawing-compare-head"><span><FileText size={14}/> 原图关键视图 · {partId} 件</span><button onClick={()=>setCompareMode(false)} title="关闭图纸对照"><X size={15}/></button></div>
+          <img src={`${import.meta.env.BASE_URL}drawings/views/${partId}.jpg`} alt={`${partId} 件原始 PDF 局部视图`}/>
+          <p>图纸尺寸：{part.dimensions}<br/>局部裁图用于形状校核；三维仍非加工级实体。</p>
+        </div>}
+        <div className="viewport-top-left"><span className="live-pill"><span/> INTERACTIVE 3D</span><span className="quality-pill">{projection==='perspective'?'透视投影':'正交投影'} · MM</span></div>
+        {expandedViewer&&<button type="button" className="viewer-exit-fullscreen" onClick={()=>setExpandedViewer(false)} aria-label="退出三维全屏"><Minimize2 size={17}/> 退出全屏</button>}
+        <div className="viewport-top-right"><span className="representation-pill"><CircleHelp size={13}/> {imported?'导入模型 · 原文件单位':`CAD 预览 · mm · ${part.dimensions}`}</span></div>
+        <div className="viewport-hint"><Rotate3D size={15}/><span>左键旋转 · 滚轮缩放 · 右键平移 · 点击透视/正交切换</span></div>
+        <div className="floating-toolbar"><div className="toolbar-segment"><ViewButton onClick={()=>changeView('iso')} active={activeView==='iso'} title="轴测视角（保留透视投影）"><Box size={17}/></ViewButton><ViewButton onClick={()=>changeView('front')} active={activeView==='front'} title="工程图正视方向">正</ViewButton><ViewButton onClick={()=>changeView('right')} active={activeView==='right'} title="侧视方向">侧</ViewButton><ViewButton onClick={()=>changeView('top')} active={activeView==='top'} title="俯视方向">俯</ViewButton><ViewButton onClick={()=>changeView('back')} active={activeView==='back'} title="背面视角">后</ViewButton><ViewButton onClick={()=>changeView('bottom')} active={activeView==='bottom'} title="仰视方向">底</ViewButton></div><div className="toolbar-divider"/><div className="toolbar-segment"><ViewButton onClick={()=>setProjection('perspective')} active={projection==='perspective'} title="真实透视投影，可随时切换">透视</ViewButton><ViewButton onClick={()=>setProjection('orthographic')} active={projection==='orthographic'} title="正交投影，便于对照工程图">正交</ViewButton></div><div className="toolbar-divider"/><div className="toolbar-segment"><ViewButton onClick={()=>changeView('zoomOut')} title="缩小"><Minus size={16}/></ViewButton><ViewButton onClick={()=>changeView('zoomIn')} title="放大"><Plus size={16}/></ViewButton><ViewButton onClick={()=>setOpt('rotate',!options.rotate)} active={options.rotate} title="自动旋转"><RotateCcw size={16}/></ViewButton></div><div className="toolbar-divider"/><div className="toolbar-segment"><ViewButton onClick={()=>setCompareMode(v=>!v)} active={compareMode} title="显示/隐藏工程图局部对照"><FileText size={16}/></ViewButton><ViewButton onClick={()=>setOpt('wireframe',!options.wireframe)} active={options.wireframe} title="线框模式"><Aperture size={16}/></ViewButton><ViewButton onClick={()=>changeView('fit')} title="按当前方向适配窗口"><Maximize2 size={16}/></ViewButton><ViewButton onClick={()=>setExpandedViewer(v=>!v)} active={expandedViewer} title={expandedViewer?'退出放大':'放大三维窗口'}>{expandedViewer?<Minimize2 size={16}/>:<Maximize2 size={16}/>}</ViewButton></div></div>
+      </section>
+      <p className="mobile-touch-hint">单指旋转模型 · 双指缩放／平移 · 左右滑动下方视角工具栏</p>
+      <div className="bottom-content"><div className="detail-box"><span className="detail-heading">零件信息 <span>PART OVERVIEW</span></span><div className="meta-line"><div><small>图纸编号</small><strong>2027 - {partId}</strong></div><div><small>标注材料</small><strong>{part.material}</strong></div><div><small>建模类别</small><strong>{imported?'导入模型':part.kind}</strong></div><div><small>图纸尺寸</small><strong>{imported?'原文件单位':part.dimensions}</strong></div></div><p>{imported?'这是你导入的三维网格。实际几何以文件本身为准，网页未对其精度、单位或尺寸进行校验。':part.shape}</p>{!imported&&<p className="dimension-note">{part.note} 屏幕会自动适配窗口大小；这里的 1:1 指模型坐标以毫米计，不代表显示器物理长度。</p>}<div className="feature-tags">{(imported?['自定义网格','自由视角','表面材质']:part.features).map(x=><span key={x}>{x}</span>)}</div></div><div className="mini-preview" onClick={()=>setShowDrawing(true)} role="button" tabIndex={0} onKeyDown={e=>{if(e.key==='Enter')setShowDrawing(true)}}><div className="mini-preview-title"><FileText size={15}/> 原始工程图 <Maximize2 size={14}/></div><img src={drawingUrl(partId,'png')} alt={`${partId}件原始机械图纸预览`}/><div>点击放大查看 <ChevronRight size={14}/></div></div></div>
+    </main>
+    <aside id="controls-drawer" aria-label="AI 助手和可折叠模型设置" className={`right-sidebar ai-focused ${settingsOpen?'settings-open':''} ${showInspector?'mobile-open':''}`}>
+      <div className="inspector-head ai-inspector-head">
+        <div><span className="eyebrow">ENGINEERING AI · BROWSER DIRECT</span><h2><Sparkles size={20}/> AI 工程助手</h2></div>
+        <button type="button" className="mobile-close icon-btn" aria-label="关闭 AI 面板" onClick={()=>setShowInspector(false)}><X size={18}/></button>
+        <span className="ai-head-status" title="仅通过当前浏览器直接请求 DeepSeek API"><span/> 浏览器直连</span>
+      </div>
+      <button type="button" className={`model-settings-toggle ${settingsOpen?'open':''}`}
+        onClick={()=>setSettingsOpen(v=>!v)} aria-controls="model-settings-panel" aria-expanded={settingsOpen}>
+        <span><SlidersHorizontal size={16}/> 模型外观与显示设置</span>
+        <span>{settingsOpen?'收起':'展开'} <ChevronDown size={16}/></span>
+      </button>
+      {settingsOpen && <div id="model-settings-panel" className="inspector-scroll inspector-settings">
+
+        <div className="section-title"><span>材质和表面</span><span>MATERIAL</span></div>
+        <div className="color-title">金属基础色 <span>{options.color.toUpperCase()}</span></div>
+        <div className="swatches">{palettes.map(color=><button key={color} style={{backgroundColor:color}} className={options.color===color?'chosen':''} onClick={()=>setOpt('color',color)} aria-label={`切换颜色 ${color}`}>{options.color===color&&<Check size={16}/>}</button>)}<label className="custom-color" title="自定义颜色"><input type="color" value={options.color} onChange={e=>setOpt('color',e.target.value)}/><Palette size={17}/></label></div>
+        <Range label="金属度" value={options.metalness} onChange={v=>setOpt('metalness',v)} min={0} max={1}/>
+        <Range label="粗糙度" value={options.roughness} onChange={v=>setOpt('roughness',v)} min={.04} max={1}/>
+        <Range label="透明程度" value={options.opacity} onChange={v=>setOpt('opacity',v)} min={.2} max={1}/>
+        <div className="section-title separated"><span>灯光与环境</span><span>LIGHTING</span></div>
+        <Range label="主光源强度" value={options.light} onChange={v=>setOpt('light',v)} min={.2} max={5} step={.1} display={options.light.toFixed(1)+'×'}/>
+        <div className="color-title">画布背景</div>
+        <div className="background-choices">{Object.entries(backgrounds).map(([id,name])=><button key={id} onClick={()=>setBackground(id)} className={background===id?'selected':''}><span className={`bg-dot bg-${id}`}/>{name}</button>)}</div>
+        <Switch label="实时阴影" checked={options.shadows} onChange={v=>setOpt('shadows',v)}/>
+        <Switch label="场景网格" checked={options.grid} onChange={v=>setOpt('grid',v)}/>
+        <Switch label="显示坐标轴" checked={options.axes} onChange={v=>setOpt('axes',v)}/>
+        {!imported&&<div className="hole-inspection-section">
+          <button type="button" className="hole-inspection-heading" onClick={()=>setShowHoleTable(v=>!v)} aria-expanded={showHoleTable}>
+            <span><Aperture size={16}/> 孔径与加工特征</span><span>{(holeCatalog[partId]||[]).length} 组 <ChevronDown size={15}/></span>
+          </button>
+          {showHoleTable&&<>
+            <p className="hole-inspection-tip">孔径可见 ≠ 全部达到加工精度。点击“观察”会把镜头定位到模型的真实孔位，不会在零件上添加装饰性标记。</p>
+            <div className="hole-inspection-list">{(holeCatalog[partId]||[]).map((h,i)=><div key={partId+'-'+i} className="hole-inspection-item">
+              <div className="hole-inspection-top"><strong>{h.name}</strong><button type="button" onClick={()=>setFocusHole({...h,seq:Date.now()+i})}>观察</button></div>
+              <div className="hole-spec">{h.model}</div>
+              <div className="hole-drawing">{h.confidence==='drawing'?'原图可辨认：':'按图估计：'}{h.drawing}</div>
+              <div className="hole-note">{h.note}</div>
+            </div>)}</div>
+            {focusHole&&<button className="hole-reset" onClick={()=>{setFocusHole(null);changeView('fit')}}>退出孔位观察 · 适配全件</button>}
+          </>}
+        </div>}
+        <div className="section-title separated"><span>视图与结构</span><span>DISPLAY</span></div>
+        <div className="projection-panel"><span>投影模式</span><div><button className={projection==='perspective'?'active':''} onClick={()=>setProjection('perspective')}>透视图</button><button className={projection==='orthographic'?'active':''} onClick={()=>setProjection('orthographic')}>正交工程视图</button></div><small>切换投影不改变当前观察方向；可随时返回透视图。与原图对照时建议使用正交。</small></div><Switch label="自动旋转" checked={options.rotate} onChange={v=>setOpt('rotate',v)}/>
+        <Switch label="线框模式" checked={options.wireframe} onChange={v=>setOpt('wireframe',v)}/>
+        <Switch label="加工棱线（仅真实几何）" checked={options.edges} onChange={v=>setOpt('edges',v)}/>
+        {!imported&&<p className="cad-solid-note">当前展示的是经过 CAD 实体布尔运算的单件预览，不存在可分解的装配子件，因此已移除容易产生误导的“分解”按钮。</p>}
+        <button className="reset-button" onClick={()=>{setOptions(initialOptions);setBackground('midnight');changeView('iso')}}><RotateCcw size={15}/> 恢复默认设置</button>
+        <button className="download-stl" onClick={()=>exportModel('stl')}><FileDown size={16}/><span>导出示意网格 STL <small>仅供可视化参考，不能直接加工</small></span><ArrowDownToLine size={16}/></button>
+      </div>}
+      <div className="chat-layout">
+        <div className="ai-intro"><div className="ai-intro-icon"><Sparkles size={18}/></div>
+          <div className="ai-current-part"><strong>{imported?imported.name:`${part.id} 件 · ${part.name}`}</strong><span>DeepSeek Flash · 当前零件上下文</span></div>
+          <button type="button" className="chat-icon-button" title="清空当前零件对话" aria-label="清空当前零件对话" onClick={clearConversation} disabled={messages.length===0&&!busy}><Trash2 size={16}/></button>
+        </div>
+        <div className="chat-list" ref={chatListRef} role="log" aria-label="AI 对话记录" aria-live="polite">
+          {messages.length===0&&<div className="chat-empty"><div className="chat-empty-icon"><MessageCircle size={25}/></div><h3>关于这个零件，想知道什么？</h3><p>结合零件信息与可选的当前视角截图回答问题。工程尺寸、孔径及公差请以原始图纸为准。</p><div className="quick-questions">{quickQuestions.map(s=><button key={s} onClick={()=>askAI(s)}><Sparkles size={13}/>{s}</button>)}</div></div>}
+          {messages.map((message,i)=><div key={i} className={`chat-bubble ${message.role}`}><span className="speaker">{message.role==='user'?'你':message.role==='error'?'连接提示':'DeepSeek'}{message.withImage?' · 已附截图':''}</span><div>{message.content}</div>{message.role==='assistant'&&<button type="button" className="copy-reply" onClick={()=>copyMessage(message.content)} title="复制这条回答"><Copy size={12}/> 复制</button>}</div>)}
+          {busy&&<div className="chat-bubble assistant"><span className="speaker">DeepSeek</span><div className="typing"><i/><i/><i/></div></div>}
+
+        </div>
+        <div className="chat-compose">
+          <div className="chat-connection-toolbar">
+            <button type="button" className={`connection-key-button ${apiKey.trim()?'is-ready':''}`} onClick={()=>setKeyOpen(v=>!v)} aria-expanded={keyOpen} aria-controls="direct-key-panel">
+              <KeyRound size={15}/>{apiKey.trim()?'已输入密钥':'连接 DeepSeek 密钥'}<ChevronDown size={13}/>
+            </button>
+            <label className="screenshot-checkbox"><input type="checkbox" checked={includeImage} onChange={e=>setIncludeImage(e.target.checked)}/><ImageIcon size={14}/>附当前视角</label>
+            <span className="browser-only-label">仅浏览器</span>
+          </div>
+          {keyOpen&&<div id="direct-key-panel" className="key-panel">
+            <div className="key-panel-head"><span><ShieldCheck size={13}/> DeepSeek API Key</span><a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener noreferrer">获取 Key ↗</a></div>
+            <div className="key-input-row"><input aria-label="DeepSeek API Key" type={showKey?'text':'password'} autoComplete="off" spellCheck="false" placeholder="粘贴本次使用的 API Key" value={apiKey} onChange={e=>setApiKey(e.target.value)} />
+              <button type="button" onClick={()=>setShowKey(v=>!v)} title={showKey?'隐藏密钥':'显示密钥'} aria-label={showKey?'隐藏密钥':'显示密钥'}>{showKey?<EyeOff size={15}/>:<Eye size={15}/>}</button>
+              <button type="button" onClick={()=>setApiKey('')} aria-label="清除密钥"><X size={15}/></button>
+            </div>
+            <div className="key-panel-bottom"><span>密钥只保存在本次页面内存中，不保存到 GitHub 或浏览器本地存储。</span><button type="button" onClick={()=>setKeyOpen(false)}>完成 <Check size={13}/></button></div>
+            <p className="cors-tip">浏览器直接请求 DeepSeek；若服务端不允许跨域（CORS），纯静态网页无法绕过，此模式将无法发送。请勿在浏览器中关闭安全防护。</p>
+          </div>}
+          <form className="ai-question-form" onSubmit={e=>{e.preventDefault();askAI()}}>
+            <textarea aria-label="向 DeepSeek 提问" placeholder={`询问 ${imported?'导入模型':part.name} 的结构、孔位、材料或当前观察视角…`}
+              value={question} maxLength={1500} onChange={e=>setQuestion(e.target.value)}
+              onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();askAI()}}} rows={5}/>
+            <div className="compose-bottom"><span>{question.length}/1500 · Enter 发送 · Shift+Enter 换行</span>
+              {busy?<button type="button" className="stop-request" onClick={cancelAI} title="停止本次请求"><Square size={15}/> 停止</button>:
+              <button type="submit" disabled={!question.trim()} title={apiKey.trim()?'发送消息':'先输入 DeepSeek API Key'}><Send size={16}/> 发送</button>}
+            </div>
+          </form>
+        </div>
+      </div>
+    </aside>
+    {(showMobileNav||showInspector)&&<button type="button" className="mobile-scrim" onClick={closeDrawers} aria-label="关闭侧边面板"/>}
+    <nav className="mobile-bottom-nav" aria-label="手机快捷导航">
+      <button type="button" onClick={openParts} className={showMobileNav?'active':''} aria-label="选择零件"><Layers size={19}/><span>零件库</span></button>
+      <button type="button" onClick={returnToViewer} aria-label="返回三维模型"><Box size={19}/><span>三维模型</span></button>
+      <button type="button" onClick={()=>openControls('appearance')} className={showInspector&&settingsOpen?'active':''} aria-label="打开外观设置"><SlidersHorizontal size={19}/><span>外观设置</span></button>
+      <button type="button" onClick={()=>openControls('ai')} className={showInspector&&!settingsOpen?'active':''} aria-label="打开 DeepSeek AI"><Sparkles size={19}/><span>AI 助手</span></button>
+      <button type="button" onClick={()=>{closeDrawers();setShowDrawing(true)}} aria-label="查看原始工程图"><FileText size={19}/><span>工程图</span></button>
+    </nav>
+    {dragging&&<div className="drop-overlay"><UploadCloud size={48}/><h2>松开文件，导入三维模型</h2><p>支持 STL / OBJ / GLB，最大 50MB</p></div>}
+    {showDrawing&&<div className="modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)setShowDrawing(false)}}><div className="drawing-dialog" role="dialog" aria-modal="true" aria-label="二维工程图预览"><div className="dialog-header"><div><FileText size={19}/><strong>原始二维工程图</strong><span>{partId} 件 · {part.name}</span></div><div><a className="pdf-link" href={drawingUrl(partId,'pdf')} target="_blank" rel="noopener noreferrer"><Download size={15}/> 打开原 PDF</a><button className="icon-btn" onClick={()=>setShowDrawing(false)} aria-label="关闭"><X size={20}/></button></div></div><div className="drawing-image"><img src={drawingUrl(partId,'png')} alt={`${partId} 件完整工程图`} /></div><div className="dialog-note">图纸仅供原图对照；三维预览由可编辑的布尔 CAD 重建，但未标注结构仍有近似，不能直接用于加工。</div></div></div>}
+    {toast&&<div className="toast"><BadgeCheck size={16}/>{toast}</div>}
+  </div>;
+}
